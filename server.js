@@ -20,6 +20,3 @@ app.use('/', workerRouter);
 app.listen(PORT, () => {
     console.log(`This server is open on PORT: ${PORT}`);
 }); 
-
-//CjM4nMDMMYClojr5
-//vghghfghjgu_db_user
