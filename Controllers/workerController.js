@@ -1,6 +1,5 @@
-import { PrismaClient } from "../generated/prisma/client.js";
+import { prisma } from "../prisma/PrismaClient.js";
 import workerService from "../Services/workerService.js";
-const prisma = new PrismaClient();
 
 class WorkerController {
     async getWorkers(req, res) {
