@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import workerRouter from "./Routers/workerRouter.js";
+import workplaceRouter from "./Routers/workplaceRouter.js";
 
 dotenv.config()
 
@@ -16,6 +17,7 @@ app.use(cors({
 }));
 
 app.use('/', workerRouter);
+app.use('/', workplaceRouter);
 
 app.listen(PORT, () => {
     console.log(`This server is open on PORT: ${PORT}`);

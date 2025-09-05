@@ -2,24 +2,27 @@ import { prisma } from "../prisma/PrismaClient.js";
 
 class WorkerService {
     async getAllWorkers() {
-        return await prisma.Worker.findMany();
+        return await prisma.Worker.findMany({include: {workplace: true}});
     }
 
     async getWorkerById(id) {
         return await prisma.Worker.findUnique({
-            where: { id: id }
+            where: { id: id },
+            include: { workplace: true }
         })
     }
 
     async getWorkersByFilters(filters) {
         return await prisma.Worker.findMany({
-            where: filters
+            where: filters,
+            include: { workplace: true }
         })
     } 
 
     async createWorker(workerData) {
         return await prisma.Worker.create({
-            data: workerData
+            data: workerData,
+            include: { workplace: true }
         });
     }
 
@@ -32,7 +35,8 @@ class WorkerService {
     async updateWorker(id, updatedData) {
         return await prisma.Worker.update({
             where: { id: id },
-            data: updatedData
+            data: updatedData,
+            include: { workplace: true }
         })
     }
 }

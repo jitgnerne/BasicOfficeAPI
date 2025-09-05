@@ -18,15 +18,23 @@ class WorkerController {
     }
 
     async createWorker(req, res) {
-        const { course, name, JobFunction, email, WorkTime, age } = req.body;
+        const { course, name, JobFunction, email, WorkTime, age, workplaceID } = req.body;
 
-        if (!course || !name || !JobFunction || !email || !WorkTime || !age) {
+        if (!course || !name || !JobFunction || !email || !WorkTime || !age || !workplaceID) {
             return res.status(400).json({ message: "Missing required filds"});
         } else {
             if (await prisma.Worker.findUnique({ where: {email : email} })) {
                 return res.status(409).json({ message: "You can not create a worker with email equal to another"});
             }
-            const newWorker = await workerService.createWorker({ course, name, JobFunction, email, WorkTime, age});
+            const newWorker = await workerService.createWorker({
+                course,
+                name,
+                JobFunction,
+                email,
+                WorkTime: parseInt(WorkTime),
+                age: parseInt(age),
+                workplace: { connect: { id: workplaceID } }
+            });
             return res.status(201).json(newWorker);
         }
     }
@@ -43,7 +51,7 @@ class WorkerController {
 
     async updateWorker(req, res) {
         const { id } = req.params;
-        const { course, name, JobFunction, email, WorkTime, age } = req.body;
+        const { course, name, JobFunction, email, WorkTime, age, workplaceID } = req.body;
 
         if (!id) {
             return res.status(400).json({ message: "Missing worker id"});
@@ -60,6 +68,10 @@ class WorkerController {
                 email: email ?? existingWorker.email,
                 WorkTime: WorkTime !== undefined ? parseInt(WorkTime) : existingWorker.WorkTime,
                 age: age !== undefined ? parseInt(age) : existingWorker.age
+            }
+
+            if (workplaceID) {
+                updatedWorkerData.workplace = { connect: { id: workplaceID } };
             }
 
             const updatedWorker = await workerService.updateWorker(id, updatedWorkerData);

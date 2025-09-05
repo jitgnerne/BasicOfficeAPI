@@ -22,5 +22,15 @@ model Worker {
     JobFunction String
     WorkTime Int
     course String
+    workplaceID  String  @db.ObjectId
+    workplace  Workplace  @relation(fields: [workplaceID], references: [id])
+}
+
+model Workplace {
+    id    String   @id @default(auto()) @map("_id") @db.ObjectId
+    name  String
+    cep   String
+    number  String
+    workers Worker[]
 }
 
